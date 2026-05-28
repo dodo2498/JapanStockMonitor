@@ -48,5 +48,8 @@ WPF の UI開発、SQLite DB連携、API通信などを学習するために制�
 ---
 
 ## 実行画面
+<img width="1125" height="1092" alt="スクリーンショット 2026-05-28 155201" src="https://github.com/user-attachments/assets/f1b904fb-a44c-4bbd-8150-4d87866a3490" />
+main画面
 
-
+<img width="1107" height="1082" alt="スクリーンショット 2026-05-28 155508" src="https://github.com/user-attachments/assets/e9bdb4bd-0e81-4352-b26a-712d27ffb4b3" />
+darkmode画面
