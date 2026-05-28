@@ -1,0 +1,333 @@
+﻿<Window x:Class="JapanStockMonitor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        mc:Ignorable="d"
+        Title="Japan Stock Monitor"
+        Height="850"
+        Width="980"
+        >
+    <Window.Resources>
+
+        <Style x:Key="RoundedButtonStyle"
+               TargetType="Button">
+
+            <Setter Property="Foreground"
+                    Value="White"/>
+
+            <Setter Property="FontWeight"
+                    Value="Bold"/>
+
+            <Setter Property="FontSize"
+                    Value="15"/>
+
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="10">
+
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+
+                        </Border>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+    </Window.Resources>
+
+    <Grid x:Name="mainGrid" Background="#EEF2F7">
+        <Border x:Name="mainCard"
+        Width="900"
+        Padding="28"
+        Background="#F8FAFC"
+        CornerRadius="16"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="320"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+
+                    <CheckBox x:Name="darkModeCheckBox"
+                                Content="ダークモード"
+                                Margin="0,0,0,15"
+                                Checked="darkModeCheckBox_Checked"
+                                Unchecked="darkModeCheckBox_Unchecked"/>
+
+                    <TextBlock x:Name="titleText"
+                        Text="Japan Stock Monitor"
+                        FontSize="28"
+                        FontWeight="Bold"
+                        TextAlignment="Center"
+                        Margin="0,0,0,8"/>
+
+                    <TextBlock x:Name="subTitleText"
+                                Text="Toyota / Sony / Nintendo"
+                                FontSize="14"
+                                Foreground="#666666"
+                                TextAlignment="Center"
+                                Margin="0,0,0,22"/>
+                    <ComboBox x:Name="currencyComboBox"
+          Width="190"
+          Height="34"
+          FontSize="15"
+          Margin="0,0,0,18"
+          SelectionChanged="currencyComboBox_SelectionChanged">
+
+                        <ComboBoxItem Content="トヨタ"/>
+                        <ComboBoxItem Content="ソニー"/>
+                        <ComboBoxItem Content="任天堂"/>
+                    </ComboBox>
+                    
+                    <Image x:Name="flagImage"
+       Width="149"
+       Height="66"
+       Stretch="Uniform"
+       Margin="0,0,0,15"/>
+                    <Label x:Name="rateLabel"
+       Content="株価"
+       FontSize="26"
+       FontWeight="Bold"
+       HorizontalContentAlignment="Center"
+       Margin="0,0,0,8"/>
+                    <TextBlock x:Name="previousPriceText"
+           FontSize="14"
+           Foreground="Gray"
+           TextAlignment="Center"
+           Margin="0,0,0,10"/>
+                    <TextBlock x:Name="changeText"
+           FontSize="22"
+           FontWeight="ExtraBold"
+           TextAlignment="Center"
+           Margin="0,0,0,8"/>
+                    <TextBlock x:Name="trendText"
+           FontSize="16"
+           FontWeight="Bold"
+           TextAlignment="Center"
+           Margin="0,0,0,10"/>
+                    <Button 
+        x:Name="updateButton" 
+        Content="更新"
+        Width="130"
+        Height="40"
+        Background="#1565C0"
+        Foreground="White"
+        FontWeight="Bold"
+        FontSize="15"
+        Margin="0,0,0,18"
+        Style="{StaticResource RoundedButtonStyle}"
+        Cursor="Hand"
+        Opacity="0.95"
+        Click="Button_Click"/>
+                    <TextBlock 
+           x:Name="amountTitleText"
+           Text="株数を入力"
+           Foreground="#555555"
+           FontSize="13"
+           TextAlignment="Center"
+           Margin="0,0,0,5"/>
+                    <TextBox x:Name="amountTextBox"
+         Width="190"
+         Height="34"
+         FontSize="16"
+         HorizontalContentAlignment="Center"
+         Margin="0,0,0,15"
+         />
+                    <Button Content="評価額計算"
+        Width="130"
+        Height="40"
+        Background="#2E7D32"
+        Foreground="White"
+        FontWeight="Bold"
+        FontSize="15"
+        Margin="0,0,0,15"
+        Style="{StaticResource RoundedButtonStyle}"
+        Cursor="Hand"
+        Opacity="0.95"
+        Click="ConvertButton_Click"/>
+                    <Button Content="お気に入り追加"
+        Width="130"
+        Height="35"
+        Background="#F9A825"
+        Margin="0,0,0,15"
+        Opacity="0.95"
+        Style="{StaticResource RoundedButtonStyle}"
+        Click="AddFavoriteButton_Click"/>
+                    <TextBlock x:Name="resultLabel"
+           Text="評価額"
+           FontSize="18"
+           FontWeight="Bold"
+           TextAlignment="Center"
+           TextWrapping="Wrap"
+           Width="300"
+           Margin="0,0,0,10"/>
+                    <TextBlock
+           x:Name="newsTitleText"
+           Text="📰 最新ニュース"
+           FontSize="16"
+           FontWeight="Bold"
+           Margin="0,10,0,10"/>
+                    <TextBlock x:Name="newsText"
+           Width="280"
+           TextWrapping="Wrap"
+           FontSize="13"/>
+                    <CheckBox x:Name="autoUpdateCheckBox"
+          Content="1分ごとに自動更新"
+          Checked="autoUpdateCheckBox_Checked"
+          Unchecked="autoUpdateCheckBox_Unchecked"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="0,0,0,0">
+
+
+
+                    <TextBlock x:Name="chartTitleText"
+               Text="トヨタ 株価推移"
+               FontSize="16"
+               FontWeight="Bold"
+               Margin="0,0,0,8"/>
+
+                    <lvc:CartesianChart x:Name="rateChart"
+                        Height="160"
+                        Width="420"
+                        Margin="0,0,0,12"/>
+
+                    <TextBlock x:Name="maxMinText"
+           Text=""
+           FontSize="14"
+           Foreground="#666666"
+           FontWeight="Bold"
+           TextAlignment="Center"
+           Margin="0,0,0,10"/>
+
+                    <TextBlock x:Name="rankingText"
+           FontSize="14"
+           FontWeight="Bold"
+           Margin="0,0,0,6"
+           TextWrapping="Wrap"
+           Height="55"/>
+                    <TextBlock 
+           x:Name="favoriteTitleText" 
+           Text="⭐ お気に入り銘柄"
+           FontSize="14"
+           FontWeight="Bold"
+           Margin="0,0,0,6"/>
+
+                    <ListBox x:Name="favoriteListBox"
+         Width="150"
+         Height="55"
+         Margin="0,0,0,12"
+         SelectionChanged="favoriteListBox_SelectionChanged"/>
+                    <Button  x:Name="deleteFavoriteButton"
+        Content="お気に入り削除"
+        Width="150"
+        Height="30"
+        Background="#D32F2F"
+        Margin="0,0,0,12"
+        Opacity="0.95"
+        Style="{StaticResource RoundedButtonStyle}"
+        Click="DeleteFavoriteButton_Click"/>
+                    <ComboBox x:Name="historyFilterComboBox"
+          Width="150"
+          Height="34"
+          Margin="0,0,0,12"
+          SelectionChanged="historyFilterComboBox_SelectionChanged">
+
+                        <ComboBoxItem Content="ALL"/>
+                        <ComboBoxItem Content="トヨタ"/>
+                        <ComboBoxItem Content="ソニー"/>
+                        <ComboBoxItem Content="任天堂"/>
+
+                    </ComboBox>
+
+                    <TextBlock x:Name="historyTitleText"
+                                Text="株価履歴"
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Margin="0,0,0,10"/>
+                    <DataGrid x:Name="historyGrid"
+          Height="230"
+          Width="480"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          IsReadOnly="True"
+          Margin="0,0,0,12">
+
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="銘柄"
+                            Binding="{Binding stock_name}"
+                            Width="60"/>
+
+                            <DataGridTextColumn Header="株価"
+                            Binding="{Binding price, StringFormat=N0}"
+                            Width="70"/>
+
+                            <DataGridTextColumn Header="株数"
+                            Binding="{Binding amount, StringFormat=N0}"
+                            Width="90"/>
+
+                            <DataGridTextColumn Header="合計"
+                            Binding="{Binding result, StringFormat=N0}"
+                            Width="90"/>
+
+                            <DataGridTextColumn Header="日時"
+                            Binding="{Binding created_at}"
+                            Width="150"/>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                    <StackPanel Orientation="Horizontal"
+            HorizontalAlignment="Right"
+            Margin="0,0,0,0">
+
+                        <Button Content="履歴削除"
+            Width="130"
+            Height="35"
+            Background="#C62828"
+            Opacity="0.95"
+            Style="{StaticResource RoundedButtonStyle}"
+            Click="DeleteHistoryButton_Click"/>
+
+                        <Button Content="CSV出力"
+            Width="130"
+            Height="35"
+            Background="#455A64"
+            Margin="10,0,0,0"
+            Opacity="0.95"
+            Style="{StaticResource RoundedButtonStyle}"
+            Click="ExportCsvButton_Click"/>
+
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
